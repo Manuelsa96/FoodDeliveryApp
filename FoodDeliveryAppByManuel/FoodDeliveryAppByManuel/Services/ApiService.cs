@@ -22,7 +22,7 @@ namespace FoodDeliveryAppByManuel.Services
             var httpClient = new HttpClient();
             var json = JsonConvert.SerializeObject(register);
             var content =new StringContent(json, Encoding.UTF8, "aplication/json");
-            var response = await httpClient.PostAsync("http://FoodApi/api/Accounts/Register", content);
+            var response = await httpClient.PostAsync(AppSettings.ApiUrl + "api/Accounts/Register", content);
             if (!response.IsSuccessStatusCode) return false;
             return true;
         }
@@ -37,7 +37,7 @@ namespace FoodDeliveryAppByManuel.Services
             var httpClient = new HttpClient();
             var json = JsonConvert.SerializeObject(login);
             var content = new StringContent(json, Encoding.UTF8, "aplication/json");
-            var response = await httpClient.PostAsync("http://FoodApi/api/Accounts/Login", content);
+            var response = await httpClient.PostAsync(AppSettings.ApiUrl +  "api/Accounts/Login", content);
             if (!response.IsSuccessStatusCode) return false;
             var jsonResult = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<Token>(jsonResult);
