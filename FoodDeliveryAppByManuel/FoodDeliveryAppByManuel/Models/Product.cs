@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FoodDeliveryAppByManuel.Models
+﻿namespace FoodDeliveryAppByManuel.Models
 {
     public class Product
     {
