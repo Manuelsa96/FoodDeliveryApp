@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace FoodDeliveryAppByManuel.Services
 {
-    public class ApiService
+    public static class ApiService
     {
-        public async Task<bool> RegisterUser(string name,string email,string password)
+        public static async Task<bool> RegisterUser(string name,string email,string password)
         {
             var register = new Register()
             {
