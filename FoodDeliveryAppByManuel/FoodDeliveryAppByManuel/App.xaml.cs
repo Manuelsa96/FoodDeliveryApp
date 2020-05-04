@@ -1,5 +1,6 @@
 ﻿using FoodDeliveryAppByManuel.Pages;
 using System;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,7 +11,17 @@ namespace FoodDeliveryAppByManuel
         public App()
         {
             InitializeComponent();
-            MainPage = new NavigationPage(new SignupPage());
+
+            //MainPage = new NavigationPage(new SignupPage());
+            var accesstoken = Preferences.Get("accessToken", string.Empty);
+            if (string.IsNullOrEmpty(accesstoken))
+            {
+                MainPage = new NavigationPage(new SignupPage());
+            }
+            else
+            {
+                MainPage = new NavigationPage(new HomePage());
+            }
         }
 
         protected override void OnStart()
