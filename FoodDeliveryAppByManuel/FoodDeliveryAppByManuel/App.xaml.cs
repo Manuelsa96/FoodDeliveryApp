@@ -10,8 +10,7 @@ namespace FoodDeliveryAppByManuel
         public App()
         {
             InitializeComponent();
-
-            MainPage = new SignupPage();
+            MainPage = new NavigationPage(new SignupPage());
         }
 
         protected override void OnStart()

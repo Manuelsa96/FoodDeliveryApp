@@ -22,7 +22,7 @@ namespace FoodDeliveryAppByManuel.Pages
         {
             if (!EntPassword.Text.Equals(EntConfirmPassword.Text))
             {
-                await DisplayAlert("Password mismatch", "Please check your confirm password", "Cancel");
+                await DisplayAlert("Password mismatch", "Please check your confirm password", "Cancel");                
             }
             else
             {
@@ -30,12 +30,18 @@ namespace FoodDeliveryAppByManuel.Pages
                 if (response)
                 {
                     await DisplayAlert("Hi", "Your Account has been created", "Alright");
+                    await Navigation.PushModalAsync(new LoginPage());
                 }
                 else
                 {
                     await DisplayAlert("Oops", "Something went wrong", "Cancel");
                 }
             }            
+        }
+
+        private async void BtnLogin_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushModalAsync(new LoginPage());
         }
     }
 }
