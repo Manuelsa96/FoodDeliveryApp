@@ -3,11 +3,11 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
-      "applicationUrl": "http://FoodServices",
+      "applicationUrl": "http://localhost/FoodApi",
       "sslPort": 0
     },
     "iisExpress": {
-      "applicationUrl": "http://localhost:49887",
+      "applicationUrl": "http://localhost/FoodApi",
       "sslPort": 0
     }
   },

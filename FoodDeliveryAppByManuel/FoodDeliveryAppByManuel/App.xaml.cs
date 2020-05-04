@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FoodDeliveryAppByManuel.Pages;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,7 +11,7 @@ namespace FoodDeliveryAppByManuel
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new SignupPage();
         }
 
         protected override void OnStart()
