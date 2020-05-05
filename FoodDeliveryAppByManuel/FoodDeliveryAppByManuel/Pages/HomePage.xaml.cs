@@ -66,5 +66,13 @@ namespace FoodDeliveryAppByManuel.Pages
             var response = await ApiService.GetTotalCartItems(Preferences.Get("userId", 0));
             LblTotalItems.Text = response.totalItems.ToString();
         }
+
+        private void CvCategories_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var currentSelection = e.CurrentSelection.FirstOrDefault() as Category;
+            if (currentSelection == null) return;
+            Navigation.PushModalAsync(new ProductListPage(currentSelection.id, currentSelection.name));
+            ((CollectionView)sender).SelectedItem = null;
+        }
     }
 }

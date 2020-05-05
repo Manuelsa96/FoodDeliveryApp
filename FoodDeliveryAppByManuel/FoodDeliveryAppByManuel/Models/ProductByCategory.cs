@@ -8,5 +8,7 @@
         public string detail { get; set; }
         public int categoryId { get; set; }
         public string imageUrl { get; set; }
+
+        public string FullImageUrl => AppSettings.ApiUrl + imageUrl;
     }
 }

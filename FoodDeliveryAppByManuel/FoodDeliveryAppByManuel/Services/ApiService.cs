@@ -68,7 +68,7 @@ namespace FoodDeliveryAppByManuel.Services
         {
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Preferences.Get("accessToken", string.Empty));
-            var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/Products/ProductsByCategory" + categoryId);
+            var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/Products/ProductsByCategory/" + categoryId);
             return JsonConvert.DeserializeObject<List<ProductByCategory>>(response);
         }
 
