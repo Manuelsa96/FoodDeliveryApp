@@ -42,11 +42,13 @@
                                                        HorizontalOptions="Center">
                                                     <Image Aspect="AspectFill"
                                                            HorizontalOptions="FillAndExpand"
-                                                           VerticalOptions="FillAndExpand" />
+                                                           VerticalOptions="FillAndExpand" 
+                                                           Source="{Binding FullImageUrl}"/>
                                                 </Frame>
                                                 <Label TextColor="#B00905"
                                                        HorizontalTextAlignment="Center"
-                                                       FontSize="Medium" />
+                                                       FontSize="Medium" 
+                                                       Text="{Binding name}"/>
                                             </StackLayout>
                                         </Frame>
                                     </StackLayout>
