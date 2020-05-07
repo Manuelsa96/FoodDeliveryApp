@@ -38,5 +38,13 @@ namespace FoodDeliveryAppByManuel.Pages
         {
             Navigation.PopModalAsync();
         }
+
+        private void CvProducts_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var currentSelection = e.CurrentSelection.FirstOrDefault() as ProductByCategory;
+            if (currentSelection == null) return;
+            Navigation.PushModalAsync(new ProductDetailPage(currentSelection.id));
+            ((CollectionView)sender).SelectedItem = null;
+        }
     }
 }
