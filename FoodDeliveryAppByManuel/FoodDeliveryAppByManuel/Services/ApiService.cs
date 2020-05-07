@@ -120,7 +120,7 @@ namespace FoodDeliveryAppByManuel.Services
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Preferences.Get("accessToken", string.Empty));
             var response = await httpClient.DeleteAsync(AppSettings.ApiUrl + "api/ShoppingCartItems/" + userId);
-            if (response.IsSuccessStatusCode) return false;
+            if (!response.IsSuccessStatusCode) return false;
             return true;
         }
 
