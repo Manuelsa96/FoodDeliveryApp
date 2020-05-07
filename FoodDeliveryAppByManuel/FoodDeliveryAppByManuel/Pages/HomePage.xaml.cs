@@ -102,5 +102,15 @@ namespace FoodDeliveryAppByManuel.Pages
         {
             Navigation.PushModalAsync(new OrdersPage());
         }
+
+        private void TapContact_Tapped(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new ContactPage());
+        }
+
+        private void TapCart_Tapped(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new CartPage());
+        }
     }
 }
