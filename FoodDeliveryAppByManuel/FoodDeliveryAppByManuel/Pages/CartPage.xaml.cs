@@ -59,5 +59,10 @@ namespace FoodDeliveryAppByManuel.Pages
                 await DisplayAlert("", "Something went wrong", "Cancel");
             }
         }
+
+        private void BtnProceed_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new PlaceOrderPage(Convert.ToDouble(LblTotalPrice.Text)));
+        }
     }
 }
