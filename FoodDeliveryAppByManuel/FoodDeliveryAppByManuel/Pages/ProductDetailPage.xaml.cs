@@ -1,10 +1,11 @@
-﻿using FoodDeliveryAppByManuel.Services;
+﻿using FoodDeliveryAppByManuel.Models;
+using FoodDeliveryAppByManuel.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -13,10 +14,12 @@ namespace FoodDeliveryAppByManuel.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ProductDetailPage : ContentPage
     {
+        private int _productId;
         public ProductDetailPage(int productId)
         {
             InitializeComponent();
             GetProductDetails(productId);
+            _productId = productId;
         }
 
         private async void GetProductDetails(int productId)
@@ -52,6 +55,26 @@ namespace FoodDeliveryAppByManuel.Pages
         private void TapBack_Tapped(object sender, EventArgs e)
         {
             Navigation.PopModalAsync();
+        }
+
+        private async void BtnAddToCart_Clicked(object sender, EventArgs e)
+        {
+            var addToCart = new AddToCart();
+            addToCart.Qty = LblQty.Text;
+            addToCart.Price = LblPrice.Text;
+            addToCart.TotalAmount = LblTotalPrice.Text;
+            addToCart.ProductId = _productId;
+            addToCart.CustomerId = Preferences.Get("userId", 0);
+
+            var response = await ApiService.AddItemsInCart(addToCart);
+            if (response)
+            {
+                await DisplayAlert("", "Your items has been added to the cart", "Alright");
+            }
+            else
+            {
+                await DisplayAlert("Oops", "Something went wrong", "Cancel");
+            }
         }
     }
 }
