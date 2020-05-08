@@ -37,5 +37,15 @@ namespace FoodDeliveryAppByManuel.Pages
         {
             Navigation.PopModalAsync();
         }
+
+        private void LvOrders_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+                var selectedOrder = e.SelectedItem as OrderByUser;
+                if (selectedOrder != null)
+                {
+                    Navigation.PushModalAsync(new OrderDetailPage(selectedOrder.id));
+                }
+            ((ListView)sender).SelectedItem = null;           
+        }
     }
 }

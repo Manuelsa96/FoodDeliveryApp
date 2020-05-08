@@ -28,7 +28,8 @@
                        HorizontalTextAlignment="Center" />
             </Grid>
             <ListView x:Name="LvOrders"
-                      HasUnevenRows="True">
+                      HasUnevenRows="True"
+                      ItemSelected="LvOrders_ItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
