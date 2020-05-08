@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using UnixTimeStamp;
 using Xamarin.Essentials;
 
 namespace FoodDeliveryAppByManuel.Services
@@ -45,11 +46,14 @@ namespace FoodDeliveryAppByManuel.Services
             Preferences.Set("accessToken", result.access_token);
             Preferences.Set("userId", result.user_Id);
             Preferences.Set("userName", result.user_name);
+            Preferences.Set("tokenExpirationTime", result.expiration_Time);
+            Preferences.Set("currentTime", UnixTime.GetCurrentTime());
             return true;
         }
 
         public static async Task<List<Category>> GetCategories()
         {
+            await TokenValidator.CheckTokenValidity();
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Preferences.Get("accessToken", string.Empty));
             var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/Categories");
@@ -58,6 +62,7 @@ namespace FoodDeliveryAppByManuel.Services
 
         public static async Task<Product> GetProductById(int productId)
         {
+            await TokenValidator.CheckTokenValidity();
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Preferences.Get("accessToken", string.Empty));
             var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/Products/" + productId);
@@ -66,6 +71,7 @@ namespace FoodDeliveryAppByManuel.Services
 
         public static async Task<List<ProductByCategory>> GetProductByCategory(int categoryId)
         {
+            await TokenValidator.CheckTokenValidity();
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Preferences.Get("accessToken", string.Empty));
             var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/Products/ProductsByCategory/" + categoryId);
@@ -74,6 +80,7 @@ namespace FoodDeliveryAppByManuel.Services
 
         public static async Task<List<PopularProduct>> GetPopularProducts()
         {
+            await TokenValidator.CheckTokenValidity();
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Preferences.Get("accessToken", string.Empty));
             var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/Products/PopularProducts");
@@ -82,6 +89,7 @@ namespace FoodDeliveryAppByManuel.Services
 
         public static async Task<bool> AddItemsInCart(AddToCart addToCart)
         {
+            await TokenValidator.CheckTokenValidity();
             var httpClient = new HttpClient();
             var json = JsonConvert.SerializeObject(addToCart);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -93,6 +101,7 @@ namespace FoodDeliveryAppByManuel.Services
 
         public static async Task<CartSubTotal> GetCartSubTotal(int userId)
         {
+            await TokenValidator.CheckTokenValidity();
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Preferences.Get("accessToken", string.Empty));
             var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/ShoppingCartItems/SubTotal/" + userId);
@@ -101,6 +110,7 @@ namespace FoodDeliveryAppByManuel.Services
 
         public static async Task<List<ShoppingCartItem>> GetShoppingCartItems(int userId)
         {
+            await TokenValidator.CheckTokenValidity();
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Preferences.Get("accessToken", string.Empty));
             var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/ShoppingCartItems/" + userId);
@@ -109,6 +119,7 @@ namespace FoodDeliveryAppByManuel.Services
 
         public static async Task<TotalCartItem> GetTotalCartItems(int userId)
         {
+            await TokenValidator.CheckTokenValidity();
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Preferences.Get("accessToken", string.Empty));
             var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/ShoppingCartItems/TotalItems/" + userId);
@@ -117,6 +128,7 @@ namespace FoodDeliveryAppByManuel.Services
 
         public static async Task<bool> ClearShoppingCart(int userId)
         {
+            await TokenValidator.CheckTokenValidity();
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Preferences.Get("accessToken", string.Empty));
             var response = await httpClient.DeleteAsync(AppSettings.ApiUrl + "api/ShoppingCartItems/" + userId);
@@ -126,6 +138,7 @@ namespace FoodDeliveryAppByManuel.Services
 
         public static async Task<OrderResponse> PlaceOrder(Order order)
         {
+            await TokenValidator.CheckTokenValidity();
             var httpClient = new HttpClient();
             var json = JsonConvert.SerializeObject(order);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -137,6 +150,7 @@ namespace FoodDeliveryAppByManuel.Services
 
         public static async Task<List<OrderByUser>> GetOrderByUser(int userId)
         {
+            await TokenValidator.CheckTokenValidity();
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Preferences.Get("accessToken", string.Empty));
             var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/Orders/OrdersByUser/" + userId);
@@ -145,10 +159,27 @@ namespace FoodDeliveryAppByManuel.Services
 
         public static async Task<List<Order>> GetOrderDetails(int orderId)
         {
+            await TokenValidator.CheckTokenValidity();
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Preferences.Get("accessToken", string.Empty));
             var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/Orders/OrderDetails/" + orderId);
             return JsonConvert.DeserializeObject<List<Order>>(response);
+        }
+    }
+
+    public static class TokenValidator
+    {
+        public static async Task CheckTokenValidity()
+        {
+            var expirationTime = Preferences.Get("tokenExpirationTime", 0);
+            Preferences.Set("currentTime", UnixTime.GetCurrentTime());
+            var currentTime = Preferences.Get("currentTime", 0);
+            if (expirationTime < currentTime)
+            {
+                var email = Preferences.Get("email", string.Empty);
+                var password = Preferences.Get("password", string.Empty);
+                await ApiService.Login(email, password);
+            }
         }
     }
 }
